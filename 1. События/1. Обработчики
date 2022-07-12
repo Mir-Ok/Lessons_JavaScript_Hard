@@ -44,4 +44,43 @@ document.addEventListener('DOMContentLoader', () => {});
 
 Например, при зажатой ЛК мыши элемент тащится, а при отпускании перестает 
 реагировать на мышь drug-and-drop
+
+<div id="drug-me" style="position:absolute;top:0;left:0;padding:10px;background:grey;text-align:center">
+    Перетащи меня
+</div>
+
+<script>
+    // создадим и сразу вызовем анонимную стрелочную функцию
+    (() => {
+        // выберем элемент
+        const drugDiv = document.getElementById('drug-me');
+        // объявим переменные
+        let x, y, left, top;
+        // определим функцию-перемещатель
+        function onMove(event) {
+            event.preventDefault();
+            drugDiv.style.left = event.clientX - x + left
+            drugDiv.style.top = event.clientY - y + top;
+        }
+        // слушаем нажатие с удержанием на кнопку
+        drugDiv.addEventListener('mousedown', event => {
+            // наполняем переменные
+            x = event.clientX;
+            y = event.clientY
+            left = parseInt(drugDiv.style.left)
+            top = parseInt(drugDiv.style.top)
+            // добавляем обработчик движения
+            window.addEventListener('mousemove', onMove);
+        });
+        // слушаем отждатие кнопки мыши
+        document.addEventListener('mouseup', () => {
+            // и в этот момент удаляем обработчик нажатия
+            window.removeEventListener('mousemove', onMove);
+        });
+    })();
+</script>
+
+ВАЖНО! 
+
+.addEventListener и .removeEventListener должны получать одну и ту же функцию
   
