@@ -7,6 +7,8 @@
 document.body.addEventListener('mousemove', function(event) {
   console.log(this);
   console.log(event);
+  event.target       // элемент, породивший событие
+  event.curentTarget // элемент, на котором сработал обработчик
 });
 
 Еще пример, получаем в ответ кнопку, которая была нажата:
@@ -17,3 +19,72 @@ document.body.addEventListener('keyup', function(event) {
 
 Обьектов много, главный вывод, что информацию для обработки события можно искать
 в объекте события.
+
+
+-------------------------------------
+Всплытие (bubbling) - срабатывание события на каждом родительском элементе (если обработчик
+вообще прикреплен) и поднятие выше
+
+Подробнее https://learn.javascript.ru/bubbling-and-capturing
+
+Событие может быть порождено на вложенном и элементе и далее подниматься
+выше по DOM, всплывать до window. Но input и focus не всплывают, остальные да.
+
+Например:
+<div id='top'>
+  <ul id='list'>
+    <li id='item'> 
+      Элемент с обработчиком
+    </li>
+  </ul>
+</div>
+<script>
+  ['top','list','item'].forEach(id => {
+    // перебираем и на каждый вешаем обработчик
+    document.getElementById(id).addEventListener('click', event => {
+      console.log(id);
+    });
+   })
+</script>
+
+Код выше выведет 'top','list','item'
+
+-------------------------------------------
+
+Погружение или захват (capture) 
+
+Перед всплытием события погружаются от window до элемента, на котором они
+непосредственно произошли. В отличии от всплытия, погружение свойственно 
+вообще всем событиям без исключения.
+
+По умолчанию, обработчики игнорят фазу погружения и начинают раюоту на этапе всплытия
+Но мы можем это изменить, добавив в .addEventListener третий агрумент
+{capture: true} или просто true 
+
+Например:
+
+<div id='top'>
+    <ul id='list'>
+      <li id='item'> 
+        Элемент с обработчиком
+      </li>
+    </ul>
+  </div>
+  <script>
+    ['top','list','item'].forEach(id => {
+      const element = document.getElementById(id);
+      
+      // добавим обработчик погружения
+      element.addEventListener('click', event => {
+        console.log('Погружаюсь ... ', id);
+        }, {capture: true });
+      
+      // добавим обработчик всплытия, обычный  
+      element.addEventListener('click', event => {
+        console.log('Всплываю ... ', id);
+        }, {capture: false });  // здесь можно было 3-параметр опустить
+     });
+  </script>
+  
+Важно! Когда удаляем обработчик события, следим, было ли погружение
+Потому что у .removeEventListener тоже есть 3-й параметр
