@@ -1,0 +1,97 @@
+Реализуем закрывающееся модальное окно
+
+Стили https://getbootstrap.com/docs/5.2/components/modal/
+
+ <!DOCTYPE html>
+ <html lang="ru">
+    <head>
+        <title>Modal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link 
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" 
+            rel="stylesheet" 
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
+            crossorigin="anonymous">
+    </head>
+    <body>
+        <!-- Кнопка -->
+        <div class="container py-5 text-center">
+            <!-- Класс js-open-modal только для приязки скрипта, класс маяк с префиксом -->
+            <button class="btn btn-primary js-open-modal" data-target="#modal">demo modal</button>
+        </div>
+        <!-- Само модальное окно с фоном для клика-->
+        <div class="modal" id="modal" style="background:rgba(0,0,0,0.5)">
+            <div class="modal-dialog">
+                <div class="modal-content"> 
+                    <div class="modal-header">
+                        <h5 class="modal-title">Модальное окно</h5>
+                    </div>
+                    <div class="modal-body">
+                        Я модальное окно            
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openButton = document.querySelector('.js-open-modal');
+            // отсылка к data-target="#modal"
+            // такие атрибуты ни на что не влияют, главное сохрнить префикс data
+            // удобно так обращаться, если кнопок или модалок несколько
+            const modal = document.querySelector(openButton.dataset.target); //#modal
+
+            // добавим открытие модального окна
+            openButton.addEventListener('click', () => {
+                modal.style.display = 'block';
+            });  
+            
+            // остановим всплытие события закрытия, если щелчок по модалке, не по серому фону 
+            modal.querySelector('.modal-dialog').addEventListener('click', event => {
+                // event.stopPropagation(); - так закрываем всплытие, плохое решение
+                // создаем флаг
+                event._isClickWithModal = true;
+            });
+
+            // добавим закрытие по щелчку
+            modal.addEventListener('click', () => {
+                if (_isClickWithModal) return; // если флаг активирован выше - выход
+                modal.style.display = 'none';                
+            });
+
+
+        });
+    </script>
+ </html>
+ 
+ ---------------------------------------
+ Релизуем программу, которая шпионит за вводом пароля на любой странице
+ Помним, что input не вспылвает, поэтому ловим его на этапе погружения
+ 
+ <!DOCTYPE html>
+ <html lang="ru">
+    <head>
+        <title>Modal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link 
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" 
+            rel="stylesheet" 
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
+            crossorigin="anonymous">
+    </head>
+    <body>
+        <!-- Кнопка -->
+        <div class="container py-5">
+           <input type"password" placeholder="Вводи пароль, не бойся" class="form-control">
+        </div>   
+    </body>
+    <script>
+        // ловим на погружении
+        window.addEventListener('input', event => {
+            console.log(event.target.value);
+        }, {capture: true});
+    </script>
+ </html>
+ 
