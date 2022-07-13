@@ -63,3 +63,7 @@ for (let i=0; i<5;++i) {
   document.body.append(btn);
   btn.addEventListener('click', onButtonClick);
 }  
+
+Подробнее 
+Контекст выполнения и стек вызовов в JavaScript
+https://medium.com/webbdev/js-a4a9dfed9782
