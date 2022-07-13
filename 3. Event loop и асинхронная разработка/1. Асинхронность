@@ -1,0 +1,11 @@
+Задача: написать код, который получает запрос с ервера и пока мы ждем
+его получения и парсинга вывести на экран слово "Загрузка ... "
+
+async function loadPagesList() {
+  const res = await fetch('https://gorest.co.in/public-api/posts');
+  const list = await res.json();
+  document.body.innerHTMT = list.data.map(item => item.title).join('<br>')
+}
+
+loadPagesList();
+document.body.textContent = "Загрузка ... ";
