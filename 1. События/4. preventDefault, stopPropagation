@@ -1,0 +1,57 @@
+preventDefault позволяет сделать так, чтобы обработка события была только
+скриптом, а браузер участия не принимал.
+
+Например, когда нам нужно что-то вывести на страницу, но не допустить ее обновления, как
+при событии submit, например. Или предотвращение перехода по ссылке
+
+В коде ниже мы содздали форму для ввода, вывода, кнопку и сделали так, чтобы страница
+не обновлялась при работе скрипта:
+
+<form id="name-form">
+    <input name="name" plaseholder="Введите ваше имя">
+    <br>
+    <button>Подтвердить</button>
+</form>
+<p id="name-display"></p>
+<script>
+    document.getElementById('name-form').addEventListener('submit', event => {
+        event.preventDefault();
+        document.getElementById('name-display').textContent = `Ваше имя ${event.target.elements[0].value}`;
+    })
+</script>
+
+--------------------------------------------
+
+Событие зарождается в window, погружается, потом всплывает и при этом
+выполняются все обработчики событий, которые зарегистрированы в коде 
+
+Но у нас есть возможность приостановить это при помощи stopPropagation
+ТО есть можно сделать так, чтобы отработал первый обработчик, и если в нем есть 
+stopPropagation, то дальше обработка не идет. Только один элемент сработает
+
+<div id='top'>
+    <ul id='list'>
+      <li id='item'> 
+        Элемент с обработчиком
+      </li>
+    </ul>
+  </div>
+  <script>
+    ['top','list','item'].forEach(id => {
+      const element = document.getElementById(id);
+      
+      // добавим обработчик погружения
+      element.addEventListener('click', event => {
+        // event.stopPropagation // можно остановить погружение здесь
+        console.log('Погружаюсь ... ', id);
+        }, {capture: true });
+      
+      // добавим обработчик всплытия, обычный  
+      element.addEventListener('click', event => {
+        console.log('Всплываю ... ', id);
+        }, {capture: false });  
+     })
+  </script>
+
+НЕ стоит им злоупотреблять!
+
