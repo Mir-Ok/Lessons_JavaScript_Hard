@@ -66,6 +66,7 @@
  </html>
  
  ---------------------------------------
+ 
  Релизуем программу, которая шпионит за вводом пароля на любой странице
  Помним, что input не вспылвает, поэтому ловим его на этапе погружения
  
@@ -94,4 +95,46 @@
         }, {capture: true});
     </script>
  </html>
+ 
+ 
+ -------------------------------------
+ Клавиатурный тренажер, игнорит все, кроме нужного
+ 
+  <!DOCTYPE html>
+ <html lang="ru">
+    <head>
+        <title>Modal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link 
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" 
+            rel="stylesheet" 
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" 
+            crossorigin="anonymous">
+    </head>
+    <body>
+        <!-- Кнопка -->
+        <div class="container py-5">
+           <input id="kb-input" placeholder="Введите qwerty" class="form-control">
+        </div>   
+    </body>
+    <script>
+        // получаем элементы
+        const input = document.getElementById('kb-input');
+        const expectedString = 'qwerty';
+         
+        // регистриует обработчик на инпуте
+        input.addEventListener('keypress', event => {
+            // определяем переменную, что получается после очередного ввода
+            const newValue = event.target.value + event.key;
+            if (newValue === expectedString) {
+                alert('Вы закончили упражнение');
+            } else if (!expectedString.startsWith(newValue)) {
+                // предотвращаем помещение символа в инпут после нажатия, если он не проходит проверку
+                event.preventDefault();
+            }
+        })
+    </script>
+ </html>
+ 
  
