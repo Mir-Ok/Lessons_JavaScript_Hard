@@ -7,24 +7,25 @@
 
 1. html-страница (promise.html)
 
- <!DOCTYPE html>
- <html lang="ru">
+<!DOCTYPE html>
+<html lang="ru">
     <head>
         <title>Modal</title>
         <meta charset="UTF-8">
         <meta name="viewport" 
-              content="width=device-width, initial-scale=1">
+                content="width=device-width, initial-scale=1">
+        <script defer src="./promise.js"></script>
     </head>
     <!-- На момент загрузки страницы стилей нет, только кнопка 
     Загрузка их начнется при открытии модального окна -->
     <body>
         <button id="open-modal-button"></button>
     </body>
- </html>
+</html>
  
 2. css-файл стилей (promise.css)
 
-// фон молального окна, получпрозрачный черный поверх всего
+// фон модального окна, полупрозрачный черный поверх всего
 .modal-root {
     background: rgba(0,0,0,0.5);
     position: fixed;
