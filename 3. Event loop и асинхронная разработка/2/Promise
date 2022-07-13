@@ -1,0 +1,5 @@
+На данный момент мы знаем два типа асинхронности: setTimeout, setInterval и async/await
+
+Задание: создаем скрипт, который подгружает css стили в момент загрузки модального окна
+Подробнее https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
