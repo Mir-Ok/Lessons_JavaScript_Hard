@@ -1,5 +1,46 @@
+Подробнее https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
 На данный момент мы знаем два типа асинхронности: setTimeout, setInterval и async/await
 
 Задание: создаем скрипт, который подгружает css стили в момент загрузки модального окна
-Подробнее https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise
+Для отработки создадим несколько файлов.
 
+1. html-страница (promise.html)
+
+ <!DOCTYPE html>
+ <html lang="ru">
+    <head>
+        <title>Modal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" 
+              content="width=device-width, initial-scale=1">
+    </head>
+    <!-- На момент загрузки страницы стилей нет, только кнопка 
+    Загрузка их начнется при открытии модального окна -->
+    <body>
+        <button id="open-modal-button"></button>
+    </body>
+ </html>
+ 
+2. css-файл стилей (promise.css)
+
+// фон молального окна, получпрозрачный черный поверх всего
+.modal-root {
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    top:0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+}
+
+// внешний вид самого окна
+.modal-win {
+    background: white;
+    max-width: 360px;
+    padding: 20px;
+    margin: 10vh auto;
+}
+
+3. скрипт (promise.js)
