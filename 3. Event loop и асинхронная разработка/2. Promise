@@ -99,3 +99,85 @@ function askConfirmation(text = 'Вы уверены?') {
 document.getElementById("open-modal-button").addEventListener('click', () => {    
     askConfirmation();
 })
+ 
+ 
+------------------------------------------
+
+Перепишем код с Promise
+
+// предусмотрим загрузку стилей несоклько раз
+let cssPromise = null
+
+// создадим функцию загрузки css 
+function loadModalCss() {
+    // проверяем еcть ли уже разрешенный ранее promise
+    if (cssPromise) return cssPromise;
+    // вводим асинхронность, передаем аргумент
+    cssPromise =  new Promise(resolve => {
+        // создадим ссылку и заполним ее атрибуты
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = './promise.css';
+        // когда resolve выполнится, Promise считается разрешенным
+        link.addEventListener('load', () => {
+            resolve();
+        });
+        // поместим в head 
+        document.head.append(link)
+        cssLoaded = true
+    })
+    return cssPromise
+
+}
+
+// функция открытия модалки
+// вводим асинхронность
+async function askConfirmation(text = 'Вы уверены?') {
+    // получаем объект Promise
+    await loadModalCss();
+    
+    return new Promise(resolve => {
+        // создадим элементы модалки
+        const root = document.createElement('div');
+        const win = document.createElement('div');
+        const paragraph = document.createElement('p');
+        const btnYes = document.createElement('button');
+        const btnNo = document.createElement('button');
+
+        // добавим соотв. классы
+        root.classList.add('modal-root');
+        win.classList.add('modal-win');
+
+        // вложим элементы друг в друга
+        
+        root.append(win);
+        win.append(paragraph);
+        win.append(btnYes);
+        win.append(btnNo);
+        
+        // заполним элементы
+        paragraph.textContent = text;
+        btnYes.textContent = 'Да'
+        btnNo.textContent = 'Нет'
+
+        btnYes.addEventListener('click', () => {
+            resolve(true);
+            root.remove()
+        })
+
+        btnNo.addEventListener('click', () => {
+            // передаем значение, которое возвращается по щелчку на кнопку
+            resolve(false);
+            root.remove()
+        })
+
+        document.body.append(root);
+    });
+
+}
+
+// повесим на клик кнопки обработчик события
+document.getElementById('open').addEventListener('click', async () => {   
+    const confirmed = await askConfirmation();
+    console.log(confirmed)
+})
