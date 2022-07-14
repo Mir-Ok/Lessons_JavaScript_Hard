@@ -45,3 +45,57 @@
 }
 
 3. скрипт (promise.js) 
+
+// предусмотрим загрузку стилей несколько раз
+let cssLoaded = false
+
+// создадим функцию загрузки css 
+function loadModalCss() {
+    // проверяем нет ли уже загруженных стилей
+    if (cssLoaded) return;
+
+    // создадим ссылку
+    const link = document.createElement('link');
+    // заполним ее атрибуты
+    link.rel = 'stylesheet';
+    link.href = './promise.css';
+    // поместим в head 
+    document.head.append(link)
+    cssLoaded = true
+}
+
+// функция открытия модалки
+function askConfirmation(text = 'Вы уверены?') {
+    // загружаем стили
+    loadModalCss();
+
+    // создадим элементы модалки
+    const root = document.createElement('div');
+    const win = document.createElement('div');
+    const paragraph = document.createElement('p');
+    const btnYes = document.createElement('button');
+    const btnNo = document.createElement('button');
+
+    // добавим соотв. классы
+    root.classList.add('modal-root');
+    win.classList.add('modal-win');
+
+    // вложим элементы друг в друга
+    
+    root.append(win);
+    win.append(paragraph);
+    win.append(btnYes);
+    win.append(btnNo);
+    
+    // заполним элементы
+    paragraph.textContent = text;
+    btnYes.textContent = 'Да'
+    btnNo.textContent = 'Нет'
+
+    document.body.append(root);
+}
+
+// повесим на клик кнопки обработчик события
+document.getElementById("open-modal-button").addEventListener('click', () => {    
+    askConfirmation();
+})
