@@ -1,1 +1,30 @@
+Синтаксис:
+
+try {
+  // код
+} catch (error) {
+  console.log(`Возникла ошибка $(error.name): $(error.message)`)
+}
+
+
+Примеры разных реакций на ошибки
+
+try {
+  // код
+} catch (error) {
+  switch (error.name) {
+    case 'SyntaxError':
+      console.log('Не удалось разобрать файл');
+      break;
+    case 'TypeError':
+      console.log('Не удалось получить свойство');
+      break;
+    default:
+      throw error;  // выкидываем ошибку снова? если не знаем как реагировать, важно!
+  } 
+  return null;
+}
+
+Обрабатывам ошибку только тогда, когда мы точно знаем что это. 
+Иначе обязательно throw 
 
