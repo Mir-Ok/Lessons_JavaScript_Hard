@@ -1,0 +1,93 @@
+function getFulName(person) {
+    return `${person.name}${person.secondName}${person.surname}`
+}
+
+console.log(getFulName(true));
+console.log(getFulName('Строка'));
+console.log(getFulName(100500));
+console.log(getFulName({ name:'Тимофей' }));
+
+// строки выше выполняются, и вернут underfined 
+// код сработает, хотя по логике это неправильно
+
+// Первый вариант исправления 
+
+function getFulName(person) {
+    if (!person) {
+        throw new TypeError('Передано пустое значение')
+    }
+    if (!person.name || !person.secondName || !person.surname) {
+        throw new TypeError('Нет нужных свойств')
+    }
+    return `${person.name}${person.secondName}${person.surname}`
+}
+
+// Второй вариант
+
+try {
+    console.log(getFulName({ name:'Тимофей' }));
+} catch (error) {
+    if (error.name === 'TypeError') {
+        console.log(`Произошла ошибка ` + error.message)
+    } else {
+        throw error  // если тип ошибки другой
+    }
+}
+
+
+// Обработка ошибок в асинхронном коде
+
+async function getUser(id) {
+    const res = await fetch(`https://gorest.co.in/public/v2/users`);
+    const data = await res.json();
+    // обработаем ошибку
+    if (data.code !== 200) {
+        throw new Error('Не удалось получить объект пользователя')
+    }
+    return data[id];
+}
+
+getUser(7).then(user => console.log(user));
+getUser('dfdf').then(user => console.log(user));
+
+// Улучшим код, добавим обработку ошибку в переменную
+
+async function getUser(id) {
+    const res = await fetch(`https://gorest.co.in/public/v2/users`);
+    const data = await res.json();
+    // обработаем ошибку
+    if (data.code !== 200) {
+        const error =  new Error('Не удалось получить объект пользователя')
+        error.statusCode = data.code;
+        throw error;
+    }
+    return data[id];
+}
+
+getUser(7).then(user => console.log(user));
+getUser('dfdf')
+    .then(user => console.log(user))
+    .catch(error => console.log(`Не удалось, код ${error.statusCode}`));
+
+
+/////////////////////
+
+// new Promise, reject
+
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.addEventListener('load', resolve);
+        script.addEventListener('error', () => {
+            reject(new Error('Не удалось загрузить скрипт'));
+        });
+        document.head.append(script)
+    });
+}
+
+// попробуем вызвать в браузере вот так
+try {await loadScript('sdfsd'); } catch (err) {console.log('Что-то не так');}
+
+// В throw можно передать все, что угодно, но лучше создавать нормальную ошибку
