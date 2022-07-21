@@ -1,0 +1,32 @@
+<div><button id="run">Новая попытка</button></div>
+<div id="result"></div>
+
+<script>
+  let isProcess = false;
+  elResult = document.querySelector('#result');
+
+  document.querySelector('#run').onclick = () => {
+    if (isProcess) {
+      elResult.textContent = 'Подождите! Задача ещё выполняется!';
+      return;
+    }
+    isProcess = true;
+    elResult.textContent = 'Задача в процессе...';
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const mark = Math.floor(Math.random() * 4) + 2;
+        mark > 3 ? resolve(mark) : reject(mark);
+      }, 5000);
+    });
+    promise
+      .then(value => {
+        elResult.textContent = `Ура! Вы сдали экзамен на ${value}! Папа, как и обещал дал вам 100$.`;
+      })
+      .catch(value => {
+        elResult.textContent = `Увы, вы получили оценку ${value}! Папа не дал вам 100$`;
+      })
+      .finally(() => {
+        isProcess = false;
+      });
+  }
+</script>
