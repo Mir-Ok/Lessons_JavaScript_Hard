@@ -45,12 +45,43 @@ Event loop - как техподдержка, пока звонков нет - �
 
 ----------------------------------
 
-Примеры:
-cinsole.log('1')
+Примеры 1
+
+console.log('1')
 setTimeout(() => console.log('4'));
 queueMicrotask(() => console.log('3'));
-cinsole.log('2')
+console.log('2')
 
 Сначала асинхронные вызовы, макрозадачи
 Потом микрозадача
 Потом отложенная макрозадача
+
+
+Пример 2
+
+console.log('1')
+setTimeout(() => console.log('6'));
+const promise = new Promise(resolve => {
+   console.log('2');
+   resolve();
+   });
+promise.then(() => console.log('4'));
+queueMicrotask(() => console.log('5'));
+console.log('3')
+
+
+Пример 3
+
+console.log('1')
+setTimeout(() => console.log('6'));
+(async () => {
+   const promise = new Promise(resolve => {
+     console.log('2');
+     resolve();
+     });
+     await promise;
+     console.log('4');
+})();
+queueMicrotask(() => console.log('5'));
+console.log('3')
+
